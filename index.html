@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle Financeiro</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    padding:30px;
+}
+
+.container{
+    width:100%;
+    max-width:800px;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.resumo{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.valor{
+    font-size:1.5rem;
+    font-weight:bold;
+}
+
+.formulario{
+    background:#1e293b;
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+input, select{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:10px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#22c55e;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.lista{
+    background:#1e293b;
+    padding:20px;
+    border-radius:20px;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    margin-bottom:10px;
+    background:#334155;
+    border-radius:10px;
+}
+
+.receita{
+    border-left:5px solid #22c55e;
+}
+
+.despesa{
+    border-left:5px solid #ef4444;
+}
+
+.excluir{
+    background:#ef4444;
+    width:auto;
+    padding:6px 12px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>💰 Controle Financeiro</h1>
+
+<div class="resumo">
+
+<div class="card">
+<h3>Saldo</h3>
+<div class="valor" id="saldo">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>Receitas</h3>
+<div class="valor" id="receitas">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>Despesas</h3>
+<div class="valor" id="despesas">R$ 0,00</div>
+</div>
+
+</div>
+
+<div class="formulario">
+
+<input type="text" id="descricao" placeholder="Descrição">
+
+<input type="number" id="valor" placeholder="Valor">
+
+<select id="tipo">
+<option value="receita">Receita</option>
+<option value="despesa">Despesa</option>
+</select>
+
+<button onclick="adicionar()">Adicionar</button>
+
+</div>
+
+<div class="lista">
+<h2>Histórico</h2>
+<div id="historico"></div>
+</div>
+
+</div>
+
+<script>
+
+let transacoes =
+JSON.parse(localStorage.getItem("transacoes")) || [];
+
+function salvar(){
+    localStorage.setItem(
+        "transacoes",
+        JSON.stringify(transacoes)
+    );
+}
+
+function atualizar(){
+
+    let historico =
+    document.getElementById("historico");
+
+    historico.innerHTML = "";
+
+    let receitas = 0;
+    let despesas = 0;
+
+    transacoes.forEach((t,index)=>{
+
+        if(t.tipo === "receita"){
+            receitas += t.valor;
+        }else{
+            despesas += t.valor;
+        }
+
+        historico.innerHTML += `
+        <div class="item ${t.tipo}">
+            <span>
+            ${t.descricao}
+            - R$ ${t.valor.toFixed(2)}
+            </span>
+
+            <button
+            class="excluir"
+            onclick="remover(${index})">
+            X
+            </button>
+        </div>`;
+    });
+
+    let saldo = receitas - despesas;
+
+    document.getElementById("saldo")
+    .innerText =
+    `R$ ${saldo.toFixed(2)}`;
+
+    document.getElementById("receitas")
+    .innerText =
+    `R$ ${receitas.toFixed(2)}`;
+
+    document.getElementById("despesas")
+    .innerText =
+    `R$ ${despesas.toFixed(2)}`;
+
+    salvar();
+}
+
+function adicionar(){
+
+    let descricao =
+    document.getElementById("descricao").value;
+
+    let valor =
+    Number(
+    document.getElementById("valor").value
+    );
+
+    let tipo =
+    document.getElementById("tipo").value;
+
+    if(!descricao || valor <= 0){
+        alert("Preencha corretamente");
+        return;
+    }
+
+    transacoes.push({
+        descricao,
+        valor,
+        tipo
+    });
+
+    document.getElementById("descricao").value="";
+    document.getElementById("valor").value="";
+
+    atualizar();
+}
+
+function remover(index){
+
+    transacoes.splice(index,1);
+
+    atualizar();
+}
+
+atualizar();
+
+</script>
+
+</body>
+</html>
