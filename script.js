@@ -122,7 +122,7 @@ const coresPorCategoria = {
     "Lazer": "#a855f7",
     "Saúde": "#ec4899",
     "Educação": "#14b8a6",
-    "Cartão de crédito": "#008000"
+    "Cartão de crédito": "#008000",
     "Outros": "#94a3b8"
 };
 
