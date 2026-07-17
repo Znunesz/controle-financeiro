@@ -1,6 +1,6 @@
 const categorias = [
     "Salário", "Alimentação", "Transporte", "Moradia",
-    "Lazer", "Saúde", "Educação", "Cartão de crédito", "Outros"
+    "Lazer", "Saúde", "Educação", "Cartao de credito", "Outros"
 ];
 
 let transacoes = JSON.parse(localStorage.getItem("transacoes")) || [];
@@ -122,7 +122,7 @@ const coresPorCategoria = {
     "Lazer": "#a855f7",
     "Saúde": "#ec4899",
     "Educação": "#14b8a6",
-    "Cartão de crédito": "#008000",
+    "Cartao de credito": "#008000",
     "Outros": "#94a3b8"
 };
 
