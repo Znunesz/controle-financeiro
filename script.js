@@ -1,5 +1,3 @@
-// ================== Dados ==================
-
 const categorias = [
     "Salário", "Alimentação", "Transporte", "Moradia",
     "Lazer", "Saúde", "Educação", "Outros"
@@ -7,8 +5,6 @@ const categorias = [
 
 let transacoes = JSON.parse(localStorage.getItem("transacoes")) || [];
 let editandoId = null;
-
-// ================== Elementos ==================
 
 const historico = document.getElementById("historico");
 const listaVazia = document.getElementById("listaVazia");
@@ -29,8 +25,6 @@ const btnLimparFiltros = document.getElementById("btnLimparFiltros");
 const btnExportar = document.getElementById("btnExportar");
 
 let grafico = null;
-
-// ================== Utilidades ==================
 
 function formatarMoeda(valor) {
     return new Intl.NumberFormat("pt-BR", {
@@ -53,9 +47,6 @@ function gerarId() {
 function salvar() {
     localStorage.setItem("transacoes", JSON.stringify(transacoes));
 }
-
-// ================== Popular selects de categoria ==================
-
 function popularCategorias() {
     categorias.forEach(cat => {
         const opt = document.createElement("option");
@@ -71,9 +62,6 @@ function popularCategorias() {
         filtroCategoria.appendChild(opt);
     });
 }
-
-// ================== Filtros ==================
-
 function transacoesFiltradas() {
     return transacoes.filter(t => {
         if (filtroTipo.value !== "todos" && t.tipo !== filtroTipo.value) return false;
@@ -82,9 +70,6 @@ function transacoesFiltradas() {
         return true;
     });
 }
-
-// ================== Renderização ==================
-
 function atualizar() {
     const filtradas = transacoesFiltradas();
 
@@ -115,8 +100,6 @@ function atualizar() {
             `;
             historico.appendChild(div);
         });
-
-    // Totais gerais (sempre sobre TODAS as transações, não só as filtradas)
     let receitas = 0;
     let despesas = 0;
     transacoes.forEach(t => {
@@ -131,8 +114,16 @@ function atualizar() {
     atualizarGrafico();
     salvar();
 }
-
-// ================== Gráfico ==================
+const coresPorCategoria = {
+    "Salário": "#64748b",
+    "Alimentação": "#f59e0b",
+    "Transporte": "#3b82f6",
+    "Moradia": "#ef4444",
+    "Lazer": "#a855f7",
+    "Saúde": "#ec4899",
+    "Educação": "#14b8a6",
+    "Outros": "#94a3b8"
+};
 
 function atualizarGrafico() {
     const despesasPorCategoria = {};
@@ -145,6 +136,7 @@ function atualizarGrafico() {
 
     const labels = Object.keys(despesasPorCategoria);
     const valores = Object.values(despesasPorCategoria);
+    const cores = labels.map(cat => coresPorCategoria[cat] || "#22c55e");
 
     const canvas = document.getElementById("graficoCategorias");
     const vazio = document.getElementById("graficoVazio");
@@ -162,11 +154,10 @@ function atualizarGrafico() {
     canvas.classList.remove("oculto");
     vazio.classList.add("oculto");
 
-    const cores = ["#22c55e", "#ef4444", "#3b82f6", "#f59e0b", "#a855f7", "#ec4899", "#14b8a6", "#64748b"];
-
     if (grafico) {
         grafico.data.labels = labels;
         grafico.data.datasets[0].data = valores;
+        grafico.data.datasets[0].backgroundColor = cores;
         grafico.update();
         return;
     }
@@ -189,9 +180,6 @@ function atualizarGrafico() {
         }
     });
 }
-
-// ================== Adicionar / Editar ==================
-
 function limparFormulario() {
     inputDescricao.value = "";
     inputValor.value = "";
@@ -258,9 +246,6 @@ function remover(id) {
     if (editandoId === id) cancelarEdicao();
     atualizar();
 }
-
-// ================== Exportar CSV ==================
-
 function exportarCSV() {
     if (transacoes.length === 0) {
         alert("Não há transações para exportar.");
@@ -286,8 +271,6 @@ function exportarCSV() {
     URL.revokeObjectURL(url);
 }
 
-// ================== Eventos ==================
-
 btnAdicionar.addEventListener("click", adicionarOuSalvar);
 btnCancelar.addEventListener("click", cancelarEdicao);
 btnExportar.addEventListener("click", exportarCSV);
@@ -302,8 +285,6 @@ btnLimparFiltros.addEventListener("click", () => {
     filtroMes.value = "";
     atualizar();
 });
-
-// ================== Início ==================
 
 popularCategorias();
 limparFormulario();
