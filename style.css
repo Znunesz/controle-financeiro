@@ -1,4 +1,4 @@
-* {
+{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -27,8 +27,6 @@ h2 {
     margin-bottom: 15px;
     font-size: 1.1rem;
 }
-
-/* Resumo */
 .resumo {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -53,8 +51,6 @@ h2 {
     font-size: 1.5rem;
     font-weight: bold;
 }
-
-/* Formulário */
 .formulario {
     background: #1e293b;
     padding: 20px;
@@ -68,7 +64,7 @@ input, select {
     margin-bottom: 10px;
     border: none;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 16px;
     background: white;
     color: #0f172a;
 }
@@ -104,8 +100,6 @@ button:hover {
 .oculto {
     display: none !important;
 }
-
-/* Gráfico */
 .grafico-card {
     background: #1e293b;
     padding: 20px;
@@ -126,8 +120,6 @@ button:hover {
     font-size: 14px;
     padding: 20px 0;
 }
-
-/* Lista */
 .lista {
     background: #1e293b;
     padding: 20px;
